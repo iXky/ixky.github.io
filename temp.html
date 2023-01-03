@@ -1,0 +1,20 @@
+<html lang="">
+<head>
+    <title>Test Project</title>
+    <link rel="stylesheet" href="css/polaroid-gallery.css" type="text/css"/>
+</head>
+<body>
+    <div id="gallery" class="fullscreen"></div>
+    <div id="nav" class="navbar">
+        <button id="preview">&lt; 前一张</button>
+        <button id="next">下一张 &gt;</button>
+    </div>
+</body>
+</html>
+
+<script type="text/javascript" src="js/polaroid-gallery.js"></script>
+<script>
+    window.onload = function () {
+        new polaroidGallery("data/data.json");
+    }
+</script>

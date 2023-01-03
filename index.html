@@ -1,20 +1,129 @@
-<html lang="">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>Test Project</title>
-    <link rel="stylesheet" href="css/polaroid-gallery.css" type="text/css"/>
+    <meta charset="UTF-8">
+    <title>随便搞搞</title>
+    <style>
+        body {
+            margin: 0;
+            position: absolute;
+            top: 30%;
+            width: 100%;
+        }
+        span {
+            /*display: none;*/
+            margin: 5px;
+            font-size: 30px;
+            width: 70px;
+            height: 70px;
+            background-color: red;
+            color: white;
+            text-align: center;
+            line-height: 70px;
+            display: inline-block;
+            border-radius: 50%;
+        }
+        .blue {
+            background-color: blue;
+        }
+        button {
+            width: 110px;
+            height: 50px;
+            font-size: 25px;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 30px 20px 15px 20px;
+        }
+        .run {
+            background-color: #228B22;
+            border: 1px solid #228B22;
+        }
+        .copy {
+            background-color: #FF8C00;
+            border: 1px solid #FF8C00;
+        }
+    </style>
 </head>
 <body>
-    <div id="gallery" class="fullscreen"></div>
-    <div id="nav" class="navbar">
-        <button id="preview">&lt; 前一张</button>
-        <button id="next">下一张 &gt;</button>
+    <div style="display: flex; justify-content: center; align-items: center;">
+        <span class="red"></span>
+        <span class="red"></span>
+        <span class="red"></span>
+        <span class="red"></span>
+        <span class="red"></span>
+        <span class="red"></span>
+        <span class="blue"></span>
+    </div>
+    <div style="display: flex; justify-content: center; align-items: center;">
+        <button class="run">来一发</button>
+        <button class="copy">复 制</button>
     </div>
 </body>
 </html>
 
-<script type="text/javascript" src="js/polaroid-gallery.js"></script>
 <script>
-    window.onload = function () {
-        new polaroidGallery("data/data.json");
+    // 红球号码[1,33]
+    let spanRed = document.querySelectorAll('.red');
+    // 蓝球号码[1,16]
+    let spanBlue = document.querySelector('.blue');
+    
+    let maker = function (start, end, len) {
+        let set = new Set(new Array(len));
+        set.clear();
+        while (true) {
+            let ok = Math.round(Math.random() * (end - start)) + start;
+            if (!set.has(ok)) {
+                set.add(ok);
+            }
+            if (set.size === len) {
+                break;
+            }
+        }
+        return Array.from(set);
     }
+
+    let strNum = "";
+    let fillNum = function () {
+        strNum = "";
+        let red = maker(1, 33, spanRed.length);
+        for (let i = 0; i < spanRed.length; i++) {
+            spanRed[i].innerHTML = red[i];
+            strNum += red[i] + "  ";
+        }
+        let blue = maker(1, 16, 1);
+        spanBlue.innerHTML = blue[0];
+        strNum += "[" + blue[0] + "]";
+    }
+
+    let num = 0;
+    let run = function () {
+        btnCopy.textContent = "复 制";
+        let hTimer = setInterval(function () {
+            if (num++ >= 30) {
+                clearInterval(hTimer);
+                num = 0;
+                return;
+            }
+            fillNum();
+        }, 60);
+    }
+    
+    let copy = function () {
+        const el = document.createElement('input');
+        el.setAttribute('value', strNum);
+        document.body.appendChild(el);
+        el.select();
+        document.execCommand('copy');
+        document.body.removeChild(el);
+        btnCopy.textContent = "已复制";
+    }
+
+    let btnCopy = document.querySelector('.copy');
+    btnCopy.addEventListener('click', copy);
+
+    let btnRun = document.querySelector('.run');
+    btnRun.addEventListener('click', run);
+
+    run();
 </script>
